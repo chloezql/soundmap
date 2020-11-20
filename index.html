@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Sound Walk 1</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v2.0.0/turf.min.js" charset="utf-8"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .human-activity {
+            background-image: url('./soundmap-logos/human-activity-icon.png');
+            background-size: cover;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            opacity:1;
+        }
+
+
+        #baker {
+            box-shadow: inset 5px 0px 0px 0px #E5A94F;
+        }
+
+        .human-voice {
+            background-image: url('./soundmap-logos/human-voice-icon.png');
+            background-size: cover;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .nature {
+            background-image: url('./soundmap-logos/nature-icon.png');
+            background-size: cover;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .music {
+            background-image: url('./soundmap-logos/music-icon.png');
+            background-size: cover;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .traffic {
+            background-image: url('./soundmap-logos/traffic-icon.png');
+            background-size: cover;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .human-activity-tag {
+            background-image: url('./soundmap-logos/human-activity-tag.png');
+            background-size: cover;
+            width: 150px;
+            height: 32px;
+
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .human-voice-tag {
+            background-image: url('./soundmap-logos/human-voice-tag.png');
+            background-size: cover;
+            width: 130px;
+            height: 32px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .music-tag {
+            background-image: url('./soundmap-logos/music-tag.png');
+            background-size: cover;
+            width: 130px;
+            height: 32px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .traffic-tag {
+            background-image: url('./soundmap-logos/traffic-tag.png');
+            background-size: cover;
+            width: 130px;
+            height: 32px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+
+        .nature-tag {
+            background-image: url('./soundmap-logos/nature-tag.png');
+            background-size: cover;
+            width: 120px;
+            height: 32px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        #section-1 {
+            box-shadow: inset 5px 0px 0px 0px #E5A94F;
+        }
+        #section-2 {
+            box-shadow: inset 5px 0px 0px 0px #9B3ED3;
+        }
+        #section-3 {
+            box-shadow: inset 5px 0px 0px 0px #E5A94F;
+        }
+        #section-4 {
+            box-shadow: inset 5px 0px 0px 0px #419533;
+        }
+        #section-5 {
+            box-shadow: inset 5px 0px 0px 0px #E5554F;
+        }
+        #section-6 {
+            box-shadow: inset 5px 0px 0px 0px #E5554F;
+        }
+        #section-7 {
+            box-shadow: inset 5px 0px 0px 0px #E5A94F;
+        }
+        #section-8 {
+            box-shadow: inset 5px 0px 0px 0px #4F79E5;
+        }
+
+         #section-9 {
+            box-shadow: inset 5px 0px 0px 0px #4F79E5;
+        }
+        #section-10 {
+            box-shadow: inset 5px 0px 0px 0px #4F79E5;
+        }
+        #section-11 {
+            box-shadow: inset 5px 0px 0px 0px #E5A94F;
+        }
+        #section-12 {
+            box-shadow: inset 5px 0px 0px 0px #E5A94F;
+        }
+        #section-13 {
+            box-shadow: inset 5px 0px 0px 0px #E5A94F;
+        }
+        #section-14 {
+            box-shadow: inset 5px 0px 0px 0px #E5A94F;
+        }
+        #section-15 {
+            box-shadow: inset 5px 0px 0px 0px #E5554F;
+        }
+
+
+        .dropbtn {
+            font: 600 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            background-color: #E5554F;
+            color: #fff;
+            display: inline-block;
+            margin: 0;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .dropbtn:hover,
+        .dropbtn:focus {
+            background-color: #e5554f;
+        }
+
+        .dropdown {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 99 !important;
+        }
+
+        .btn {
+            position: absolute;
+            top: 50px;
+            left: 10px;
+            width: 200px;
+            height: 150px;
+            color: #222222;
+
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 160px;
+            overflow: auto;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content button {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            border: none;
+            width: 100%;
+        }
+
+        .dropdown button:hover {
+            background-color: #ddd;
+            color:#E5554F;
+            border: #e5554f 1px;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
+
+</head>
+
+<body>
+    <style>
+        #map {
+            position: fixed;
+            width: 66%;
+        }
+
+        #features {
+            width: 34%;
+            margin-left: 66%;
+            font-family: sans-serif;
+            overflow-y: scroll;
+            background-color: #fafafa;
+
+        }
+
+        #aldgate {
+            line-height: 0px;
+            height: 0px;
+            font-size: 1px;
+            overflow-y: hidden;
+            padding: 0px;
+        }
+
+        section {
+            padding: 25px 50px;
+            line-height: 25px;
+            border-bottom: 1px solid #ddd;
+            overflow-y: scroll;
+            height:100%;
+            opacity: 0.25;
+            font-size: 13px;
+        }
+
+
+        section.active {
+            opacity: 1;
+        }
+
+        .human-activity-section {
+            box-shadow: inset 5px 0px 0px 0px #E5A94F;
+        }
+
+
+        section:last-child {
+            border-bottom: none;
+            margin-bottom: 500px;
+        }
+
+        section h3 {
+            font-size: 30px;
+        }
+
+        section p {
+            font-size: 20px;
+        }
+    </style>
+
+
+
+    <div id="map">
+
+    </div>
+
+    <div class="dropdown">
+        <button onclick="myFunction()" class="dropbtn">Filter Sound</button>
+        <div id="myDropdown" class="dropdown-content">
+            <button id="human-activity" onclick="filter(event)">Human Activity</button>
+            <button id="human-voice" onclick="filter(event)">Human Voice</button>
+            <button id="traffic" onclick="filter(event)">Traffic</button>
+            <button id="nature" onclick="filter(event)">Nature</button>
+            <button id="music" onclick="filter(event)">Music</button>
+
+
+        </div>
+    </div>
+
+
+    <div id="features">
+        <section id="start" class="active">
+            <h1 style="font-size:35px;">CHINATOWN SOUNDMAP</h1>
+            <hr style="margin-top: -25px;">
+            <h2 style="font-size: 25px; color: #E5554F; margin-top: -10px;"></h2>
+            <h3 style="font-size: 25px; color: #222222;">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsa
+                reiciendis sit consectetur, est fuga assumenda autem ex dolor laudantium ad veniam quas minima voluptas,
+                iusto eum, similique maxime nemo incidunt! </h3>
+        </section>
+
+        <section id="section-1" class="human-activity-section">
+            <h3> Columbus Park </h3>
+            <div class="human-activity-tag"></div>
+            <audio controls>
+                <source src="./sound-files/Chinese chess 3.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+
+            <p> Chinese chess players at the park </p>
+            <img src="./soundmap-images/clay-banks-0L68MOXpGKU-unsplash.jpg" width="100%" height="40%" alt="">
+
+        </section>
+
+        <section id="section-2" class="music-section">
+            <h3> Columbus Park </h3>
+            <div class="music-tag"></div>
+            <audio controls>
+                <source src="./sound-files/CP listening to music.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+
+            <p> Traditional Chinese music on the radio </p>
+            <img src="./soundmap-images/Old people at Columbus Park (1).jpg" width="100%" height="40%" alt="">
+        </section>
+
+        <section id="section-3" class="human-activity-section">
+            <h3> Columbus Park </h3>
+            <div class="human-activity-tag"></div>
+            <audio controls>
+                <source src="./sound-files/Senior women laughing at card game Columbus Park.m4a" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+
+            <p> Grandmas laughing and playing cards outside </p>
+            <img src="./soundmap-images/Columbus Park 4.jpg" width="100%" height="40%" alt="">
+        </section>
+
+
+        <section id="section-4" class="nature-section">
+            <h3> Columbus Park </h3>
+            <div class="nature-tag"></div>
+            <audio controls>
+                <source src="./sound-files/birds cp.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+
+            <p> Birds singing </p>
+            <img src="./soundmap-images/Columbus Park 2019.jpg" width="100%" height="40%" alt="">
+        </section>
+
+
+        <section id="section-5" class="human-voice-section">
+            <h3> Manhattan Bridge, at Division Street </h3>
+            <div class="human-voice-tag"></div>
+            <audio controls>
+                <source src="./sound-files/Manhattan Bridge - Division Street - Fruit vendor Calling for Sales.m4a" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+
+            <p> Fruit vendor shouting in Fuzhounese </p>
+            <img src="./soundmap-images/Forsyth St Market 3 .jpg" width="100%" height="40%" alt="">
+        </section>
+
+
+        <section id="section-6" class="human-voice-section">
+            <h3> Market under Manhattan Bridge (Forsyth St) </h3>
+            <div class="human-voice-tag"></div>
+            <audio controls>
+                <source src="./sound-files/fuzhounese market under bridge.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+
+            <p> Crab vendor negotiating in Fuzhounese </p>
+            <img src="./soundmap-images/Forsyth St Market 2.jpg" width="100%" height="40%" alt="">
+        </section>
+
+        <section id="section-7" class="human-activity-section">
+            <h3> Under Manhattan Bridge (Forsyth St) </h3>
+            <div class="human-activity-tag"></div>
+            <audio controls>
+                <source src="./sound-files/market under bridge.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+
+            <p> Forsyth Market vendors selling produce </p>
+            <img src="./soundmap-images/Forsyth St Market 3 .jpg" width="100%" height="40%" alt="">
+        </section>
+
+
+        <section id="section-8" class="traffic-section">
+            <h3> Manhattan Bridge, East Broadway </h3>
+            <div class="traffic-tag"></div>
+            <audio controls>
+                <source src="./sound-files/subway on Manhattan Bridge.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+
+            <p> Subway car crossing the tracks over the Manhattan Bridge </p>
+            <img src="./soundmap-images/Chinatown vans to BK Division and Market.jpg" width="100%" height="40%" alt="">
+        </section>
+
+       
+
+        <section id="section-10" class="traffic-section">
+            <h3> Division St and Market St </h3>
+            <div class="traffic-tag"></div>
+            <audio controls>
+                <source src="./sound-files/vans 1.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+
+            <p> Manhattan-Brooklyn Chinatown vans </p>
+            <img src="./soundmap-images/Chinatown vans to BK.jpg" width="100%" height="40%" alt="">
+        </section>
+
+
+        <section id="section-11" class="human-activity-section">
+            <h3> Sara D Roosevelt Park playground </h3>
+            <div class="human-activity-tag"></div>
+            <audio controls>
+                <source src="./sound-files/playground chimes srp.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+
+            <p> Playground chimes at the park </p>
+            <img src="./soundmap-images/myles-tan-WNAO036c6FM-unsplash.jpg" width="100%" height="40%" alt="">
+        </section>
+
+
+        <section id="section-12" class="human-activity-section">
+            <h3> Sara D Roosevelt basketball court </h3>
+            <div class="human-activity-tag"></div>
+            <audio controls>
+                <source src="./sound-files/music and bball srp.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+
+            <p> Basketball and music at the park </p>
+            <img src="./soundmap-images/Sara D Roosevelt Park basketball.jpg" width="100%" height="40%" alt="">
+        </section>
+
+        <section id="section-13" class="human-activity-section">
+            <h3> Sara D Roosevelt Park handball court </h3>
+            <div class="human-activity-tag"></div>
+            <audio controls>
+                <source src="./sound-files/Chinese dance 1.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+
+            <p> Chinese dance class at the park with radio music and neighborhood sounds </p>
+            <img src="./soundmap-images/Sara D Roosevelt Park handball court dancing.jpg" width="100%" height="40%" alt="">
+        </section>
+
+
+        <section id="section-14" class="human-activity-section">
+            <h3> Sara D Roosevelt soccer field </h3>
+            <div class="human-activity-tag"></div>
+            <audio controls>
+                <source src="./sound-files/soccer goal srp 1.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+
+            <p> Outdoor soccer game </p>
+            <img src="./soundmap-images/soccer-5506110_1920.jpg" width="100%" height="40%" alt="">
+        </section>
+
+        <section id="section-15" class="human-voice-section">
+            <h3> Chung Pak (96 Baxter)</h3>
+            <div class="human-voice-tag"></div>
+            <audio controls>
+                <source src="./sound-files/soccer goal srp 1.wav" type="audio/wav">
+                Your browser does not support the audio element.
+            </audio>
+
+            <p> Interview with Chung Pak older adult resident, Li Yang Rong, about the change in neighborhood sounds
+            </p>
+            <img src="./soundmap-images/Chung Pak.jpg" width="100%" height="40%" alt="">
+        </section>
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+    <div class="btn">
+
+    </div>
+
+
+    <script>
+        function myFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function (event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+
+
+        mapboxgl.accessToken = 'pk.eyJ1IjoiY2hsb2V6cWwiLCJhIjoiY2tnaTkxYmpuMGJpejJ5cXRyMjVrY2dlYyJ9.vNcSVtg1eDX7DNaJlv71zg';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/chloezql/ckguw3is10r4w1amkkqnve390',
+            center: [-73.999536, 40.716037],
+            zoom: 13,
+            bearing: 27,
+            pitch: 45
+        });
+
+
+
+
+
+        function findPosition(obj) {
+            var currenttop = 0;
+            if (obj.offsetParent) {
+                do {
+                    currenttop += obj.offsetTop;
+                } while ((obj = obj.offsetParent));
+                return [currenttop];
+            }
+        }
+
+
+        function handleKitten(e) {
+
+
+            console.log("id:", this.id);
+            if (this.id == "mark1") {
+
+
+                window.scrollTo(0,
+                    findPosition(document.getElementById("section-1")));
+                setActiveChapter("section-1");
+            } else if (this.id == "marker2") {
+                window.scrollTo(0,
+                    findPosition(document.getElementById("section-2")));
+                setActiveChapter("section-2");
+            }
+            else if (this.id == "marker3") {
+                window.scrollTo(0,
+                    findPosition(document.getElementById("section-3")));
+                setActiveChapter("section-3");
+            }
+            else if (this.id == "marker4") {
+                window.scrollTo(0,
+                    findPosition(document.getElementById("section-4")));
+                setActiveChapter("section-4");
+            }
+
+            else if (this.id == "marker5") {
+                window.scrollTo(0,
+                    findPosition(document.getElementById("section-5")));
+                setActiveChapter("section-5");
+            }
+
+            else if (this.id == "marker6") {
+                window.scrollTo(0,
+                    findPosition(document.getElementById("section-6")));
+                setActiveChapter("section-6");
+            }
+
+            else if (this.id == "marker7") {
+                window.scrollTo(0,
+                    findPosition(document.getElementById("section-7")));
+                setActiveChapter("section-7");
+            }
+
+            else if (this.id == "marker8") {
+                window.scrollTo(0,
+                    findPosition(document.getElementById("section-8")));
+                setActiveChapter("section-8");
+            }
+            else if (this.id == "marker9") {
+                window.scrollTo(0,
+                    findPosition(document.getElementById("section-9")));
+                setActiveChapter("section-9");
+            }
+
+            else if (this.id == "marker10") {
+                window.scrollTo(0,
+                    findPosition(document.getElementById("section-10")));
+                setActiveChapter("section-10");
+            }
+            else if (this.id == "marker11") {
+                window.scrollTo(0,
+                    findPosition(document.getElementById("section-11")));
+                setActiveChapter("section-11");
+            }
+
+            else if (this.id == "marker12") {
+                window.scrollTo(0,
+                    findPosition(document.getElementById("section-12")));
+                setActiveChapter("section-12");
+            }
+
+            else if (this.id == "marker13") {
+                window.scrollTo(0,
+                    findPosition(document.getElementById("section-13")));
+                setActiveChapter("section-13");
+            }
+
+            else if (this.id == "marker14") {
+                window.scrollTo(0,
+                    findPosition(document.getElementById("section-14")));
+                setActiveChapter("section-14");
+            }
+
+            else {
+                window.scrollTo(0,
+                    findPosition(document.getElementById("section-14")));
+                setActiveChapter("section-14");
+            }
+
+            //el.style.backgroundImage = "https://github.com/chloezql/sound-walk/blob/main/red.png";
+
+            //var elem = document.getElementById("baker"); 
+            //elem.scrollIntoView(); 
+
+            //e.stopPropagation();
+        }
+
+        function handleMapClick(e) {
+            console.log('handleMapClick', e);
+        }
+
+
+        var el = document.createElement('div');
+        el.className = 'human-activity';
+        el.id = 'mark1';
+        el.addEventListener('click', handleKitten, false);
+        var mark1 = new mapboxgl.Marker(el)
+            .setLngLat([-73.999890, 40.715845])
+            .addTo(map);
+        //mark1.getElement().id = "marker";
+
+        //mark1.getElement().addEventListener('click', handleKitten, false);
+
+
+
+        // var markerel = document.createElement('div');
+        // markerel.style.width = 15 + 'px';
+        // markerel.style.height = 40 + 'px';
+        //markerel.style.backgroundColor = 'purple';
+
+        //markerel.id = "marker";
+
+
+
+        var el2 = document.createElement('div');
+        el2.className = 'music';
+        el2.id = 'marker2';
+        el2.addEventListener('click', handleKitten, false);
+
+        var marker2 = new mapboxgl.Marker(el2)
+            .setLngLat([-73.999973, 40.715637])
+            .addTo(map);
+
+
+        var el3 = document.createElement('div');
+        el3.className = 'human-activity';
+        el3.id = 'marker3';
+        el3.addEventListener('click', handleKitten, false);
+        var marker3 = new mapboxgl.Marker(el3)
+            .setLngLat([-73.999834, 40.715583])
+            .addTo(map);
+
+
+        var el4 = document.createElement('div');
+        el4.className = 'nature';
+        el4.id = 'marker4';
+        el4.addEventListener('click', handleKitten, false);
+        var marker4 = new mapboxgl.Marker(el4)
+            .setLngLat([-74.000118, 40.715923])
+            .addTo(map);
+
+
+
+        var el5 = document.createElement('div');
+        el5.className = 'human-voice';
+        el5.id = 'marker5';
+        el5.addEventListener('click', handleKitten, false);
+        var marker5 = new mapboxgl.Marker(el5)
+            .setLngLat([-73.994232, 40.714374])
+            .addTo(map);
+
+
+
+        //market
+        var el6 = document.createElement('div');
+        el6.className = 'human-voice';
+        el6.id = 'marker6';
+        el6.addEventListener('click', handleKitten, false);
+        var marker6 = new mapboxgl.Marker(el6)
+            .setLngLat([-73.994643, 40.714985])
+            .addTo(map);
+
+
+
+
+        var el7 = document.createElement('div');
+        el7.className = 'human-activity';
+        el7.id = 'marker7';
+        el7.addEventListener('click', handleKitten, false);
+        var marker7 = new mapboxgl.Marker(el7)
+            .setLngLat([-73.994411, 40.714658])
+            .addTo(map);
+
+
+
+        var el8 = document.createElement('div');
+        el8.className = 'traffic';
+        el8.id = 'marker8';
+        el8.addEventListener('click', handleKitten, false);
+        var marker8 = new mapboxgl.Marker(el8)
+            .setLngLat([-73.994365, 40.714097])
+            .addTo(map);
+
+
+
+
+
+
+
+       
+
+
+
+        var el10 = document.createElement('div');
+        el10.className = 'traffic';
+        el10.id = 'marker10';
+        el10.addEventListener('click', handleKitten, false);
+        var marker10 = new mapboxgl.Marker(el10)
+            .setLngLat([-73.994657, 40.713974])
+            .addTo(map);
+
+
+
+        var el11 = document.createElement('div');
+        el11.className = 'human-activity';
+        el11.id = 'marker11';
+        el11.addEventListener('click', handleKitten, false);
+        var marker11 = new mapboxgl.Marker(el11)
+            .setLngLat([-73.993955, 40.717049])
+            .addTo(map);
+
+
+
+        var el12 = document.createElement('div');
+        el12.className = 'human-activity';
+        el12.id = 'marker12';
+        el12.addEventListener('click', handleKitten, false);
+        var marker12 = new mapboxgl.Marker(el12)
+            .setLngLat([-73.993687, 40.717585])
+            .addTo(map);
+
+
+        var el13 = document.createElement('div');
+        el13.className = 'human-activity';
+        el13.id = 'marker13';
+        el13.addEventListener('click', handleKitten, false);
+        var marker13 = new mapboxgl.Marker(el13)
+            .setLngLat([-73.993666, 40.717828])
+            .addTo(map);
+
+
+        var el14 = document.createElement('div');
+        el14.className = 'human-activity';
+        el14.id = 'marker14';
+        el14.addEventListener('click', handleKitten, false);
+        var marker14 = new mapboxgl.Marker(el14)
+            .setLngLat([-73.993276, 40.718338])
+            .addTo(map);
+
+
+        var el15 = document.createElement('div');
+        el15.className = 'human-voice';
+        el15.id = 'marker15';
+        el15.addEventListener('click', handleKitten, false);
+        var marker15 = new mapboxgl.Marker(el15)
+            .setLngLat([-73.999751, 40.717205])
+            .addTo(map);
+
+
+
+
+        var chapters = {
+            'start': {
+                bearing: 27,
+                center: [-73.999536, 40.716037],
+                zoom: 13,
+                pitch: 10,
+                duration: 5000
+
+            },
+            'section-1': {
+                bearing: 27,
+                center: [-73.999890, 40.715845],
+                zoom: 17,
+                pitch: 20,
+                duration: 6000
+            },
+            'section-2': {
+                speed: 0.2,
+                center: [-73.999973, 40.715637],
+                bearing: 27,
+                zoom: 17,
+                pitch: 0
+            },
+            'section-3': {
+                bearing: 90,
+                center: [-73.999834, 40.715583],
+                zoom: 17,
+                duration: 3000,
+                pitch: 40
+            },
+            'section-4': {
+                bearing: 27,
+                center: [-74.000118, 40.715923],
+                zoom: 17,
+                duration: 3000,
+            },
+            'section-5': {
+                bearing: 27,
+                center: [-73.994232, 40.714374],
+                zoom: 17,
+                pitch: 20,
+                duration: 2000,
+            },
+            'section-6': {
+                bearing: 27,
+                center: [-73.994643, 40.714985],
+                zoom: 18,
+                duration: 5000
+            },
+            'section-7': {
+                bearing: 27,
+                center: [-73.994411, 40.714658],
+                zoom: 18.5,
+                pitch: 40,
+                duration: 3000
+            },
+            'section-8': {
+                bearing: 30,
+                center: [-73.994365, 40.714097],
+                zoom: 18,
+                pitch: 20,
+                duration: 3000
+            },
+            
+            'section-10': {
+                bearing: 70,
+                center: [-73.994657, 40.713974],
+                zoom: 18,
+                pitch: 20,
+                duration: 5500
+            },
+            'section-11': {
+                bearing: 70,
+                center: [-73.993955, 40.717049],
+                zoom: 18,
+                pitch: 20,
+                duration: 5500
+            },
+            'section-12': {
+                bearing: 70,
+                center: [-73.993687, 40.717585],
+                zoom: 18,
+                pitch: 20,
+                duration: 5500
+            },
+            'section-13': {
+                bearing: 70,
+                center: [-73.993666, 40.717828],
+                zoom: 18,
+                pitch: 20,
+                duration: 5500
+            },
+            'section-14': {
+                bearing: 70,
+                center: [-73.993276, 40.718338],
+                zoom: 18,
+                pitch: 20,
+                duration: 5500
+            },
+            'section-15': {
+                bearing: 70,
+                center: [-73.999751, 40.717205],
+                zoom: 18,
+                pitch: 20,
+                duration: 5500
+            }
+        };
+
+
+
+
+        // On every scroll event, check which element is on screen
+        window.onscroll = function () {
+            var chapterNames = Object.keys(chapters);
+            for (var i = 0; i < chapterNames.length; i++) {
+                var chapterName = chapterNames[i];
+                if (isElementOnScreen(chapterName)) {
+                    setActiveChapter(chapterName);
+                    break;
+                }
+            }
+        };
+
+        var activeChapterName = 'start';
+
+        function setMarkerColor(marker, color) {
+            var $elem = jQuery(marker.getElement());
+            $elem.find('svg g[fill="' + marker._color + '"]').attr('fill', color);
+            marker._color = color;
+        }
+
+        function setActiveChapter(chapterName) {
+
+
+            //caulfield-gardens
+
+
+            if (chapterName === activeChapterName) return;
+            map.flyTo(chapters[chapterName]);
+            document.getElementById(chapterName).setAttribute('class', 'active');
+            document.getElementById(activeChapterName).setAttribute('class', '');
+
+            activeChapterName = chapterName;
+
+
+        }
+
+        function isElementOnScreen(id) {
+            var element = document.getElementById(id);
+            var bounds = element.getBoundingClientRect();
+            return bounds.top < window.innerHeight && bounds.bottom > 0;
+        }
+
+        /*
+        line-height: 0px;
+        height: 0px;
+        font-size: 1px;
+        overflow-y: hidden;
+        padding: 0px;
+        */
+        function filter(event) {
+            console.log(event.target.id);
+            if (event.target.id == "human-activity") {
+                console.log("human-activity");
+
+                Array.from(document.getElementsByClassName('human-activity-section')).forEach(elem => {
+                    elem.style.height = "600px";
+                    elem.style.lineHeight = "25px";
+                    elem.style.padding = "25px 50px";
+                    elem.style.overflowY = "scroll";
+                    elem.style.opacity = "1";
+
+                });
+
+                Array.from(document.getElementsByClassName('music-section')).forEach(elem => {
+                    elem.style.height = "0px";
+                    elem.style.lineHeight = "0px";
+                    elem.style.padding = "0px 0px";
+                    elem.style.overflowY = "hidden";
+                    elem.style.opacity = "0";
+
+                });
+                Array.from(document.getElementsByClassName('human-voice-section')).forEach(elem => {
+                    elem.style.height = "0px";
+                    elem.style.lineHeight = "0px";
+                    elem.style.padding = "0px 0px";
+                    elem.style.overflowY = "hidden";
+                    elem.style.opacity = "0";
+
+                });
+                Array.from(document.getElementsByClassName('traffic-section')).forEach(elem => {
+                    elem.style.height = "0px";
+                    elem.style.lineHeight = "0px";
+                    elem.style.padding = "0px 0px";
+                    elem.style.overflowY = "hidden";
+                    elem.style.opacity = "0";
+
+                });
+                Array.from(document.getElementsByClassName('nature-section')).forEach(elem => {
+                    elem.style.height = "0px";
+                    elem.style.lineHeight = "0px";
+                    elem.style.padding = "0px 0px";
+                    elem.style.overflowY = "hidden";
+                    elem.style.opacity = "0";
+
+                });
+
+
+                Array.from(document.getElementsByClassName('human-activity')).forEach(elem => {
+                    elem.style.opacity = "1";
+                });
+                Array.from(document.getElementsByClassName('human-voice')).forEach(elem => {
+                    elem.style.opacity = "0";
+                });
+                Array.from(document.getElementsByClassName('traffic')).forEach(elem => {
+                    elem.style.opacity = "0";
+                });
+                Array.from(document.getElementsByClassName('nature')).forEach(elem => {
+                    elem.style.opacity = "0";
+                });
+                Array.from(document.getElementsByClassName('music')).forEach(elem => {
+                    elem.style.opacity = "0";
+                });
+            }
+
+            else if (event.target.id == "human-voice") {
+                console.log("human-voice");
+                Array.from(document.getElementsByClassName('human-voice-section')).forEach(elem => {
+                    elem.style.height = "600px";
+                    elem.style.lineHeight = "25px";
+                    elem.style.padding = "25px 50px";
+                    elem.style.overflowY = "scroll";
+                    elem.style.opacity = "1";
+
+                });
+
+                Array.from(document.getElementsByClassName('music-section')).forEach(elem => {
+                    elem.style.height = "0px";
+                    elem.style.lineHeight = "0px";
+                    elem.style.padding = "0px 0px";
+                    elem.style.overflowY = "hidden";
+                    elem.style.opacity = "0";
+
+                });
+                Array.from(document.getElementsByClassName('human-activity-section')).forEach(elem => {
+                    elem.style.height = "0px";
+                    elem.style.lineHeight = "0px";
+                    elem.style.padding = "0px 0px";
+                    elem.style.overflowY = "hidden";
+                    elem.style.opacity = "0";
+
+                });
+                Array.from(document.getElementsByClassName('traffic-section')).forEach(elem => {
+                    elem.style.height = "0px";
+                    elem.style.lineHeight = "0px";
+                    elem.style.padding = "0px 0px";
+                    elem.style.overflowY = "hidden";
+                    elem.style.opacity = "0";
+
+                });
+                Array.from(document.getElementsByClassName('nature-section')).forEach(elem => {
+                    elem.style.height = "0px";
+                    elem.style.lineHeight = "0px";
+                    elem.style.padding = "0px 0px";
+                    elem.style.overflowY = "hidden";
+                    elem.style.opacity = "0";
+
+                });
+
+
+                Array.from(document.getElementsByClassName('human-voice')).forEach(elem => {
+                    elem.style.opacity = "1";
+                });
+                Array.from(document.getElementsByClassName('human-activity')).forEach(elem => {
+                    elem.style.opacity = "0";
+                });
+                Array.from(document.getElementsByClassName('traffic')).forEach(elem => {
+                    elem.style.opacity = "0";
+                });
+                Array.from(document.getElementsByClassName('nature')).forEach(elem => {
+                    elem.style.opacity = "0";
+                });
+                Array.from(document.getElementsByClassName('music')).forEach(elem => {
+                    elem.style.opacity = "0";
+                });
+            }
+
+            else if (event.target.id == "traffic") {
+                console.log("traffic");
+                Array.from(document.getElementsByClassName('traffic-section')).forEach(elem => {
+                    elem.style.height = "600px";
+                    elem.style.lineHeight = "25px";
+                    elem.style.padding = "25px 50px";
+                    elem.style.overflowY = "scroll";
+                    elem.style.opacity = "1";
+
+                });
+
+                Array.from(document.getElementsByClassName('music-section')).forEach(elem => {
+                    elem.style.height = "0px";
+                    elem.style.lineHeight = "0px";
+                    elem.style.padding = "0px 0px";
+                    elem.style.overflowY = "hidden";
+                    elem.style.opacity = "0";
+
+                });
+                Array.from(document.getElementsByClassName('human-voice-section')).forEach(elem => {
+                    elem.style.height = "0px";
+                    elem.style.lineHeight = "0px";
+                    elem.style.padding = "0px 0px";
+                    elem.style.overflowY = "hidden";
+                    elem.style.opacity = "0";
+
+                });
+                Array.from(document.getElementsByClassName('human-activity-section')).forEach(elem => {
+                    elem.style.height = "0px";
+                    elem.style.lineHeight = "0px";
+                    elem.style.padding = "0px 0px";
+                    elem.style.overflowY = "hidden";
+                    elem.style.opacity = "0";
+
+                });
+                Array.from(document.getElementsByClassName('nature-section')).forEach(elem => {
+                    elem.style.height = "0px";
+                    elem.style.lineHeight = "0px";
+                    elem.style.padding = "0px 0px";
+                    elem.style.overflowY = "hidden";
+                    elem.style.opacity = "0";
+
+                });
+
+
+                Array.from(document.getElementsByClassName('traffic')).forEach(elem => {
+                    elem.style.opacity = "1";
+                });
+                Array.from(document.getElementsByClassName('human-voice')).forEach(elem => {
+                    elem.style.opacity = "0";
+                });
+                Array.from(document.getElementsByClassName('human-activity')).forEach(elem => {
+                    elem.style.opacity = "0";
+                });
+                Array.from(document.getElementsByClassName('nature')).forEach(elem => {
+                    elem.style.opacity = "0";
+                });
+                Array.from(document.getElementsByClassName('music')).forEach(elem => {
+                    elem.style.opacity = "0";
+                });
+            }
+
+            else if (event.target.id == "nature") {
+                console.log("nature");
+                Array.from(document.getElementsByClassName('nature-section')).forEach(elem => {
+                    elem.style.height = "100%";
+                    elem.style.lineHeight = "25px";
+                    elem.style.padding = "25px 50px";
+                    elem.style.overflowY = "scroll";
+                    elem.style.opacity = "1";
+
+                });
+
+                Array.from(document.getElementsByClassName('music-section')).forEach(elem => {
+                    elem.style.height = "0px";
+                    elem.style.lineHeight = "0px";
+                    elem.style.padding = "0px 0px";
+                    elem.style.overflowY = "hidden";
+                    elem.style.opacity = "0";
+
+                });
+                Array.from(document.getElementsByClassName('human-voice-section')).forEach(elem => {
+                    elem.style.height = "0px";
+                    elem.style.lineHeight = "0px";
+                    elem.style.padding = "0px 0px";
+                    elem.style.overflowY = "hidden";
+                    elem.style.opacity = "0";
+
+                });
+                Array.from(document.getElementsByClassName('traffic-section')).forEach(elem => {
+                    elem.style.height = "0px";
+                    elem.style.lineHeight = "0px";
+                    elem.style.padding = "0px 0px";
+                    elem.style.overflowY = "hidden";
+                    elem.style.opacity = "0";
+
+                });
+                Array.from(document.getElementsByClassName('human-activity-section')).forEach(elem => {
+                    elem.style.height = "0px";
+                    elem.style.lineHeight = "0px";
+                    elem.style.padding = "0px 0px";
+                    elem.style.overflowY = "hidden";
+                    elem.style.opacity = "0";
+
+                });
+
+
+                Array.from(document.getElementsByClassName('nature')).forEach(elem => {
+                    elem.style.opacity = "1";
+                });
+                Array.from(document.getElementsByClassName('human-voice')).forEach(elem => {
+                    elem.style.opacity = "0";
+                });
+                Array.from(document.getElementsByClassName('traffic')).forEach(elem => {
+                    elem.style.opacity = "0";
+                });
+                Array.from(document.getElementsByClassName('human-activity')).forEach(elem => {
+                    elem.style.opacity = "0";
+                });
+                Array.from(document.getElementsByClassName('music')).forEach(elem => {
+                    elem.style.opacity = "0";
+                });
+            }
+
+            else {
+                console.log("music");
+                Array.from(document.getElementsByClassName('music-section')).forEach(elem => {
+                    elem.style.height = "100%";
+                    elem.style.lineHeight = "25px";
+                    elem.style.padding = "25px 50px";
+                    elem.style.overflowY = "scroll";
+                });
+
+                Array.from(document.getElementsByClassName('human-activity-section')).forEach(elem => {
+                    elem.style.height = "0px";
+                    elem.style.lineHeight = "0px";
+                    elem.style.padding = "0px 0px";
+                    elem.style.overflowY = "hidden";
+                });
+                Array.from(document.getElementsByClassName('human-voice-section')).forEach(elem => {
+                    elem.style.height = "0px";
+                    elem.style.lineHeight = "0px";
+                    elem.style.padding = "0px 0px";
+                    elem.style.overflowY = "hidden";
+                });
+                Array.from(document.getElementsByClassName('traffic-section')).forEach(elem => {
+                    elem.style.height = "0px";
+                    elem.style.lineHeight = "0px";
+                    elem.style.padding = "0px 0px";
+                    elem.style.overflowY = "hidden";
+                });
+                Array.from(document.getElementsByClassName('nature-section')).forEach(elem => {
+                    elem.style.height = "0px";
+                    elem.style.lineHeight = "0px";
+                    elem.style.padding = "0px 0px";
+                    elem.style.overflowY = "hidden";
+                });
+
+
+                Array.from(document.getElementsByClassName('music')).forEach(elem => {
+                    elem.style.opacity = "1";
+                });
+                Array.from(document.getElementsByClassName('human-voice')).forEach(elem => {
+                    elem.style.opacity = "0";
+                });
+                Array.from(document.getElementsByClassName('traffic')).forEach(elem => {
+                    elem.style.opacity = "0";
+                });
+                Array.from(document.getElementsByClassName('nature')).forEach(elem => {
+                    elem.style.opacity = "0";
+                });
+                Array.from(document.getElementsByClassName('human-activity')).forEach(elem => {
+                    elem.style.opacity = "0";
+                });
+            }
+
+        }
+
+
+
+    </script>
+
+</body>
+
+</html>
