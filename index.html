@@ -3,296 +3,17 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Sound Walk 1</title>
+    <title>Sound Map</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
     <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
     <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v2.0.0/turf.min.js" charset="utf-8"></script>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-        }
-
-        #map {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 100%;
-        }
-
-        .human-activity {
-            background-image: url('./soundmap-logos/human-activity-icon.png');
-            background-size: cover;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            opacity:1;
-        }
-
-
-        #baker {
-            box-shadow: inset 5px 0px 0px 0px #E5A94F;
-        }
-
-        .human-voice {
-            background-image: url('./soundmap-logos/human-voice-icon.png');
-            background-size: cover;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        .nature {
-            background-image: url('./soundmap-logos/nature-icon.png');
-            background-size: cover;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        .music {
-            background-image: url('./soundmap-logos/music-icon.png');
-            background-size: cover;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        .traffic {
-            background-image: url('./soundmap-logos/traffic-icon.png');
-            background-size: cover;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        .human-activity-tag {
-            background-image: url('./soundmap-logos/human-activity-tag.png');
-            background-size: cover;
-            width: 150px;
-            height: 32px;
-
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
-
-        .human-voice-tag {
-            background-image: url('./soundmap-logos/human-voice-tag.png');
-            background-size: cover;
-            width: 130px;
-            height: 32px;
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
-
-        .music-tag {
-            background-image: url('./soundmap-logos/music-tag.png');
-            background-size: cover;
-            width: 130px;
-            height: 32px;
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
-
-        .traffic-tag {
-            background-image: url('./soundmap-logos/traffic-tag.png');
-            background-size: cover;
-            width: 130px;
-            height: 32px;
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
-
-
-        .nature-tag {
-            background-image: url('./soundmap-logos/nature-tag.png');
-            background-size: cover;
-            width: 120px;
-            height: 32px;
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
-
-        #section-1 {
-            box-shadow: inset 5px 0px 0px 0px #E5A94F;
-        }
-        #section-2 {
-            box-shadow: inset 5px 0px 0px 0px #9B3ED3;
-        }
-        #section-3 {
-            box-shadow: inset 5px 0px 0px 0px #E5A94F;
-        }
-        #section-4 {
-            box-shadow: inset 5px 0px 0px 0px #419533;
-        }
-        #section-5 {
-            box-shadow: inset 5px 0px 0px 0px #E5554F;
-        }
-        #section-6 {
-            box-shadow: inset 5px 0px 0px 0px #E5554F;
-        }
-        #section-7 {
-            box-shadow: inset 5px 0px 0px 0px #E5A94F;
-        }
-        #section-8 {
-            box-shadow: inset 5px 0px 0px 0px #4F79E5;
-        }
-
-         #section-9 {
-            box-shadow: inset 5px 0px 0px 0px #4F79E5;
-        }
-        #section-10 {
-            box-shadow: inset 5px 0px 0px 0px #4F79E5;
-        }
-        #section-11 {
-            box-shadow: inset 5px 0px 0px 0px #E5A94F;
-        }
-        #section-12 {
-            box-shadow: inset 5px 0px 0px 0px #E5A94F;
-        }
-        #section-13 {
-            box-shadow: inset 5px 0px 0px 0px #E5A94F;
-        }
-        #section-14 {
-            box-shadow: inset 5px 0px 0px 0px #E5A94F;
-        }
-        #section-15 {
-            box-shadow: inset 5px 0px 0px 0px #E5554F;
-        }
-
-
-        .dropbtn {
-            font: 600 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-            background-color: #E5554F;
-            color: #fff;
-            display: inline-block;
-            margin: 0;
-            padding: 10px 20px;
-            border: none;
-            cursor: pointer;
-            border-radius: 3px;
-        }
-
-        .dropbtn:hover,
-        .dropbtn:focus {
-            background-color: #e5554f;
-        }
-
-        .dropdown {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            z-index: 99 !important;
-        }
-
-        .btn {
-            position: absolute;
-            top: 50px;
-            left: 10px;
-            width: 200px;
-            height: 150px;
-            color: #222222;
-
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f1f1f1;
-            min-width: 160px;
-            overflow: auto;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-        }
-
-        .dropdown-content button {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            border: none;
-            width: 100%;
-        }
-
-        .dropdown button:hover {
-            background-color: #ddd;
-            color:#E5554F;
-            border: #e5554f 1px;
-        }
-
-        .show {
-            display: block;
-        }
-    </style>
-
+    <link rel="stylesheet" href="soundmap.css">
 </head>
 
 <body>
-    <style>
-        #map {
-            position: fixed;
-            width: 66%;
-        }
-
-        #features {
-            width: 34%;
-            margin-left: 66%;
-            font-family: sans-serif;
-            overflow-y: scroll;
-            background-color: #fafafa;
-
-        }
-
-        #aldgate {
-            line-height: 0px;
-            height: 0px;
-            font-size: 1px;
-            overflow-y: hidden;
-            padding: 0px;
-        }
-
-        section {
-            padding: 25px 50px;
-            line-height: 25px;
-            border-bottom: 1px solid #ddd;
-            overflow-y: scroll;
-            height:100%;
-            opacity: 0.25;
-            font-size: 13px;
-        }
-
-
-        section.active {
-            opacity: 1;
-        }
-
-        .human-activity-section {
-            box-shadow: inset 5px 0px 0px 0px #E5A94F;
-        }
-
-
-        section:last-child {
-            border-bottom: none;
-            margin-bottom: 500px;
-        }
-
-        section h3 {
-            font-size: 30px;
-        }
-
-        section p {
-            font-size: 20px;
-        }
-    </style>
-
-
+    
 
     <div id="map">
 
@@ -306,8 +27,6 @@
             <button id="traffic" onclick="filter(event)">Traffic</button>
             <button id="nature" onclick="filter(event)">Nature</button>
             <button id="music" onclick="filter(event)">Music</button>
-
-
         </div>
     </div>
 
@@ -317,14 +36,19 @@
             <h1 style="font-size:35px;">CHINATOWN SOUNDMAP</h1>
             <hr style="margin-top: -25px;">
             <h2 style="font-size: 25px; color: #E5554F; margin-top: -10px;"></h2>
-            <h3 style="font-size: 25px; color: #222222;">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsa
-                reiciendis sit consectetur, est fuga assumenda autem ex dolor laudantium ad veniam quas minima voluptas,
-                iusto eum, similique maxime nemo incidunt! </h3>
+            <h3 style="font-size: 22px; color: #222222;">Welcome to our Chinatown Sound Map! Join us on a virtual tour
+                of Chinatown and experience how sound can shape our sense of place: click on an icon to listen to a real
+                sound recording from Manhattan Chinatown's unique soundscape.
+                <br>
+                The interactive Sound Map is a collaborative effort made possible by the contributions of Chinatown’s
+                residents and visitors. Anyone can add to it! Just send an audio recording to <a
+                    href="mailto:submit@soundsofchinatown.com">submit@soundsofchinatown.com</a> </h3>
         </section>
 
         <section id="section-1" class="human-activity-section">
             <h3> Columbus Park </h3>
             <div class="human-activity-tag"></div>
+            
             <audio controls>
                 <source src="./sound-files/Chinese chess 3.wav" type="audio/wav">
                 Your browser does not support the audio element.
@@ -358,8 +82,6 @@
             <p> Grandmas laughing and playing cards outside </p>
             <img src="./soundmap-images/Columbus Park 4.jpg" width="100%" height="40%" alt="">
         </section>
-
-
         <section id="section-4" class="nature-section">
             <h3> Columbus Park </h3>
             <div class="nature-tag"></div>
@@ -371,13 +93,12 @@
             <p> Birds singing </p>
             <img src="./soundmap-images/Columbus Park 2019.jpg" width="100%" height="40%" alt="">
         </section>
-
-
         <section id="section-5" class="human-voice-section">
             <h3> Manhattan Bridge, at Division Street </h3>
             <div class="human-voice-tag"></div>
             <audio controls>
-                <source src="./sound-files/Manhattan Bridge - Division Street - Fruit vendor Calling for Sales.m4a" type="audio/wav">
+                <source src="./sound-files/Manhattan Bridge - Division Street - Fruit vendor Calling for Sales.m4a"
+                    type="audio/wav">
                 Your browser does not support the audio element.
             </audio>
 
@@ -422,8 +143,6 @@
             <p> Subway car crossing the tracks over the Manhattan Bridge </p>
             <img src="./soundmap-images/Chinatown vans to BK Division and Market.jpg" width="100%" height="40%" alt="">
         </section>
-
-       
 
         <section id="section-10" class="traffic-section">
             <h3> Division St and Market St </h3>
@@ -472,7 +191,8 @@
             </audio>
 
             <p> Chinese dance class at the park with radio music and neighborhood sounds </p>
-            <img src="./soundmap-images/Sara D Roosevelt Park handball court dancing.jpg" width="100%" height="40%" alt="">
+            <img src="./soundmap-images/Sara D Roosevelt Park handball court dancing.jpg" width="100%" height="40%"
+                alt="">
         </section>
 
 
@@ -491,14 +211,28 @@
         <section id="section-15" class="human-voice-section">
             <h3> Chung Pak (96 Baxter)</h3>
             <div class="human-voice-tag"></div>
-            <audio controls>
-                <source src="./sound-files/soccer goal srp 1.wav" type="audio/wav">
-                Your browser does not support the audio element.
-            </audio>
-
             <p> Interview with Chung Pak older adult resident, Li Yang Rong, about the change in neighborhood sounds
             </p>
             <img src="./soundmap-images/Chung Pak.jpg" width="100%" height="40%" alt="">
+            
+
+            <button type="button" class="collapsible">Interview with Li</button>
+            <div class="content">
+                <video width="400" controls>
+                    <source src="./sound-files/Interview with Li (with logo).mp4" type="video/mp4">
+                    Your browser does not support HTML video.
+                  </video>
+            </div>
+
+
+            <button type="button" class="collapsible">Interview with Cheng Fai Lin</button>
+            <div class="content">
+                    <video width="400" controls>
+                <source src="./sound-files/Interview with Cheng Fai Lin.mp4" type="video/mp4">
+                    Your browser does not support HTML video.
+                  </video>
+            </div>
+            
         </section>
 
 
@@ -514,16 +248,17 @@
 
     </div>
 
-    <div class="btn">
-
-    </div>
 
 
     <script>
+
+        // create a dropdown at the upper left corner
+        /* 
+        DO NOT CHANGE ANYTHING HERE
+        */
         function myFunction() {
             document.getElementById("myDropdown").classList.toggle("show");
         }
-
         // Close the dropdown if the user clicks outside of it
         window.onclick = function (event) {
             if (!event.target.matches('.dropbtn')) {
@@ -537,8 +272,7 @@
                 }
             }
         }
-
-
+        //set up the mapbox with it's correct style and api key
         mapboxgl.accessToken = 'pk.eyJ1IjoiY2hsb2V6cWwiLCJhIjoiY2tnaTkxYmpuMGJpejJ5cXRyMjVrY2dlYyJ9.vNcSVtg1eDX7DNaJlv71zg';
         var map = new mapboxgl.Map({
             container: 'map',
@@ -549,10 +283,8 @@
             pitch: 45
         });
 
-
-
-
-
+        // DO NOT CHANGE ANYTHING HERE
+        //find the location of the click on screen, and return the value 
         function findPosition(obj) {
             var currenttop = 0;
             if (obj.offsetParent) {
@@ -562,104 +294,19 @@
                 return [currenttop];
             }
         }
-
-
+        // make a marker responsive to a click
+        //check it's position and move to the corresponding text
         function handleKitten(e) {
 
+            var id = this.id;
+            var lastNumber = id.slice(-1);
+            var sec = "section-";
+            var address = sec.concat(lastNumber);
+            console.log("id:",address);
+            window.scrollTo(0,
+                    findPosition(document.getElementById(address)));
+             setActiveChapter(address);
 
-            console.log("id:", this.id);
-            if (this.id == "mark1") {
-
-
-                window.scrollTo(0,
-                    findPosition(document.getElementById("section-1")));
-                setActiveChapter("section-1");
-            } else if (this.id == "marker2") {
-                window.scrollTo(0,
-                    findPosition(document.getElementById("section-2")));
-                setActiveChapter("section-2");
-            }
-            else if (this.id == "marker3") {
-                window.scrollTo(0,
-                    findPosition(document.getElementById("section-3")));
-                setActiveChapter("section-3");
-            }
-            else if (this.id == "marker4") {
-                window.scrollTo(0,
-                    findPosition(document.getElementById("section-4")));
-                setActiveChapter("section-4");
-            }
-
-            else if (this.id == "marker5") {
-                window.scrollTo(0,
-                    findPosition(document.getElementById("section-5")));
-                setActiveChapter("section-5");
-            }
-
-            else if (this.id == "marker6") {
-                window.scrollTo(0,
-                    findPosition(document.getElementById("section-6")));
-                setActiveChapter("section-6");
-            }
-
-            else if (this.id == "marker7") {
-                window.scrollTo(0,
-                    findPosition(document.getElementById("section-7")));
-                setActiveChapter("section-7");
-            }
-
-            else if (this.id == "marker8") {
-                window.scrollTo(0,
-                    findPosition(document.getElementById("section-8")));
-                setActiveChapter("section-8");
-            }
-            else if (this.id == "marker9") {
-                window.scrollTo(0,
-                    findPosition(document.getElementById("section-9")));
-                setActiveChapter("section-9");
-            }
-
-            else if (this.id == "marker10") {
-                window.scrollTo(0,
-                    findPosition(document.getElementById("section-10")));
-                setActiveChapter("section-10");
-            }
-            else if (this.id == "marker11") {
-                window.scrollTo(0,
-                    findPosition(document.getElementById("section-11")));
-                setActiveChapter("section-11");
-            }
-
-            else if (this.id == "marker12") {
-                window.scrollTo(0,
-                    findPosition(document.getElementById("section-12")));
-                setActiveChapter("section-12");
-            }
-
-            else if (this.id == "marker13") {
-                window.scrollTo(0,
-                    findPosition(document.getElementById("section-13")));
-                setActiveChapter("section-13");
-            }
-
-            else if (this.id == "marker14") {
-                window.scrollTo(0,
-                    findPosition(document.getElementById("section-14")));
-                setActiveChapter("section-14");
-            }
-
-            else {
-                window.scrollTo(0,
-                    findPosition(document.getElementById("section-14")));
-                setActiveChapter("section-14");
-            }
-
-            //el.style.backgroundImage = "https://github.com/chloezql/sound-walk/blob/main/red.png";
-
-            //var elem = document.getElementById("baker"); 
-            //elem.scrollIntoView(); 
-
-            //e.stopPropagation();
         }
 
         function handleMapClick(e) {
@@ -667,36 +314,28 @@
         }
 
 
+        
+        
+        // create all the markers!!!
+        // add new ones to the end, 
+        
         var el = document.createElement('div');
         el.className = 'human-activity';
-        el.id = 'mark1';
+        el.id = 'mark1';//section-xx   markxx
         el.addEventListener('click', handleKitten, false);
         var mark1 = new mapboxgl.Marker(el)
-            .setLngLat([-73.999890, 40.715845])
+            .setLngLat([-73.999890, 40.715845]) 
             .addTo(map);
-        //mark1.getElement().id = "marker";
-
-        //mark1.getElement().addEventListener('click', handleKitten, false);
-
-
-
-        // var markerel = document.createElement('div');
-        // markerel.style.width = 15 + 'px';
-        // markerel.style.height = 40 + 'px';
-        //markerel.style.backgroundColor = 'purple';
-
-        //markerel.id = "marker";
-
 
 
         var el2 = document.createElement('div');
         el2.className = 'music';
         el2.id = 'marker2';
         el2.addEventListener('click', handleKitten, false);
-
         var marker2 = new mapboxgl.Marker(el2)
             .setLngLat([-73.999973, 40.715637])
             .addTo(map);
+
 
 
         var el3 = document.createElement('div');
@@ -727,8 +366,6 @@
             .addTo(map);
 
 
-
-        //market
         var el6 = document.createElement('div');
         el6.className = 'human-voice';
         el6.id = 'marker6';
@@ -736,8 +373,6 @@
         var marker6 = new mapboxgl.Marker(el6)
             .setLngLat([-73.994643, 40.714985])
             .addTo(map);
-
-
 
 
         var el7 = document.createElement('div');
@@ -749,7 +384,6 @@
             .addTo(map);
 
 
-
         var el8 = document.createElement('div');
         el8.className = 'traffic';
         el8.id = 'marker8';
@@ -759,15 +393,6 @@
             .addTo(map);
 
 
-
-
-
-
-
-       
-
-
-
         var el10 = document.createElement('div');
         el10.className = 'traffic';
         el10.id = 'marker10';
@@ -775,7 +400,6 @@
         var marker10 = new mapboxgl.Marker(el10)
             .setLngLat([-73.994657, 40.713974])
             .addTo(map);
-
 
 
         var el11 = document.createElement('div');
@@ -825,7 +449,11 @@
 
 
 
-
+        /*
+        control the zooming of the text section, and it's corresponding longitude and latitude
+        add new ones at the last of the list
+        make sure it's name is the same with the id you give in <body> > <features>
+        */
         var chapters = {
             'start': {
                 bearing: 27,
@@ -840,7 +468,7 @@
                 center: [-73.999890, 40.715845],
                 zoom: 17,
                 pitch: 20,
-                duration: 6000
+                duration: 6000 
             },
             'section-2': {
                 speed: 0.2,
@@ -889,7 +517,7 @@
                 pitch: 20,
                 duration: 3000
             },
-            
+
             'section-10': {
                 bearing: 70,
                 center: [-73.994657, 40.713974],
@@ -934,9 +562,7 @@
             }
         };
 
-
-
-
+        
         // On every scroll event, check which element is on screen
         window.onscroll = function () {
             var chapterNames = Object.keys(chapters);
@@ -948,20 +574,17 @@
                 }
             }
         };
-
         var activeChapterName = 'start';
 
+        //change the marker's style and color if needed
         function setMarkerColor(marker, color) {
             var $elem = jQuery(marker.getElement());
             $elem.find('svg g[fill="' + marker._color + '"]').attr('fill', color);
             marker._color = color;
         }
 
+        // if we scroll, we ket track of which section is being activated
         function setActiveChapter(chapterName) {
-
-
-            //caulfield-gardens
-
 
             if (chapterName === activeChapterName) return;
             map.flyTo(chapters[chapterName]);
@@ -970,9 +593,9 @@
 
             activeChapterName = chapterName;
 
-
         }
 
+        //check if a right side text is on the screen, if it is, make its text balck 
         function isElementOnScreen(id) {
             var element = document.getElementById(id);
             var bounds = element.getBoundingClientRect();
@@ -980,11 +603,9 @@
         }
 
         /*
-        line-height: 0px;
-        height: 0px;
-        font-size: 1px;
-        overflow-y: hidden;
-        padding: 0px;
+            This make the change when we click a botton in the dropdown menu
+            DO NOT CHANGE ANYTHING HERE
+
         */
         function filter(event) {
             console.log(event.target.id);
@@ -1292,6 +913,27 @@
         }
 
 
+
+
+
+        /*
+            This part controls our video in Chung pak is responsive the click
+            DO NOT CHANGE ANYTHING HERE
+        */
+
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+        for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        }
 
     </script>
 

@@ -1,0 +1,311 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.human-activity {
+    background-image: url('./soundmap-logos/human-activity-icon.png');
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    opacity: 1;
+}
+
+
+#baker {
+    box-shadow: inset 5px 0px 0px 0px #E5A94F;
+}
+
+.human-voice {
+    background-image: url('./soundmap-logos/human-voice-icon.png');
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.nature {
+    background-image: url('./soundmap-logos/nature-icon.png');
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.music {
+    background-image: url('./soundmap-logos/music-icon.png');
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.traffic {
+    background-image: url('./soundmap-logos/traffic-icon.png');
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.human-activity-tag {
+    background-image: url('./soundmap-logos/human-activity-tag.png');
+    background-size: cover;
+    width: 150px;
+    height: 32px;
+
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.human-voice-tag {
+    background-image: url('./soundmap-logos/human-voice-tag.png');
+    background-size: cover;
+    width: 130px;
+    height: 32px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.music-tag {
+    background-image: url('./soundmap-logos/music-tag.png');
+    background-size: cover;
+    width: 130px;
+    height: 32px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.traffic-tag {
+    background-image: url('./soundmap-logos/traffic-tag.png');
+    background-size: cover;
+    width: 130px;
+    height: 32px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+
+.nature-tag {
+    background-image: url('./soundmap-logos/nature-tag.png');
+    background-size: cover;
+    width: 120px;
+    height: 32px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+#section-1 {
+    box-shadow: inset 5px 0px 0px 0px #E5A94F;
+}
+
+#section-2 {
+    box-shadow: inset 5px 0px 0px 0px #9B3ED3;
+}
+
+#section-3 {
+    box-shadow: inset 5px 0px 0px 0px #E5A94F;
+}
+
+#section-4 {
+    box-shadow: inset 5px 0px 0px 0px #419533;
+}
+
+#section-5 {
+    box-shadow: inset 5px 0px 0px 0px #E5554F;
+}
+
+#section-6 {
+    box-shadow: inset 5px 0px 0px 0px #E5554F;
+}
+
+#section-7 {
+    box-shadow: inset 5px 0px 0px 0px #E5A94F;
+}
+
+#section-8 {
+    box-shadow: inset 5px 0px 0px 0px #4F79E5;
+}
+
+#section-9 {
+    box-shadow: inset 5px 0px 0px 0px #4F79E5;
+}
+
+#section-10 {
+    box-shadow: inset 5px 0px 0px 0px #4F79E5;
+}
+
+#section-11 {
+    box-shadow: inset 5px 0px 0px 0px #E5A94F;
+}
+
+#section-12 {
+    box-shadow: inset 5px 0px 0px 0px #E5A94F;
+}
+
+#section-13 {
+    box-shadow: inset 5px 0px 0px 0px #E5A94F;
+}
+
+#section-14 {
+    box-shadow: inset 5px 0px 0px 0px #E5A94F;
+}
+
+#section-15 {
+    box-shadow: inset 5px 0px 0px 0px #E5554F;
+}
+
+
+.dropbtn {
+    font: 600 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    background-color: #E5554F;
+    color: #fff;
+    display: inline-block;
+    margin: 0;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.dropbtn:hover,
+.dropbtn:focus {
+    background-color: #e5554f;
+}
+
+.dropdown {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 99 !important;
+}
+
+.btn {
+    position: absolute;
+    top: 50px;
+    left: 10px;
+    width: 200px;
+    height: 150px;
+    color: #222222;
+
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.dropdown-content button {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    border: none;
+    width: 100%;
+}
+
+.dropdown button:hover {
+    background-color: #ddd;
+    color: #E5554F;
+    border: #e5554f 1px;
+}
+
+.show {
+    display: block;
+}
+
+.collapsible {
+    background-color: rgb(153, 56, 53);
+    color: white;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+}
+
+.collapsible:hover {
+    background-color: #E5554f;
+}
+
+.content {
+    padding: 0 ;
+    display: none;
+    overflow: hidden;
+    background-color: #f1f1f1;
+}
+#map {
+    position: fixed;
+    width: 66%;
+}
+
+#features {
+    width: 34%;
+    margin-left: 66%;
+    font-family: sans-serif;
+    overflow-y: scroll;
+    background-color: #fafafa;
+
+}
+
+#aldgate {
+    line-height: 0px;
+    height: 0px;
+    font-size: 1px;
+    overflow-y: hidden;
+    padding: 0px;
+}
+
+section {
+    padding: 25px 50px;
+    line-height: 25px;
+    border-bottom: 1px solid #ddd;
+    overflow-y: scroll;
+    height: 100%;
+    opacity: 0.25;
+    font-size: 13px;
+}
+
+
+section.active {
+    opacity: 1;
+}
+
+.human-activity-section {
+    box-shadow: inset 5px 0px 0px 0px #E5A94F;
+}
+
+
+section:last-child {
+    border-bottom: none;
+    margin-bottom: 500px;
+}
+
+section h3 {
+    font-size: 30px;
+}
+
+section p {
+    font-size: 20px;
+}
